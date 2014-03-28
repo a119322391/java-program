@@ -1,0 +1,32 @@
+import java.awt.*;
+import javax.swing.*;
+
+public class TestPanels extends JFrame{
+	JPanel p1 = new JPanel();
+	p1.setLayout(new GridLayout(5,4);
+	JButton jbtzero = new JButton(new JButton(zero));
+	JButton jbtclear = new JButton(new JButton("clear"));
+	JButton jbtadd = new JButton(new JButton("+"));
+	JButton jbtsubtract = new JButton(new JButton("-"));
+	JButton jbtmutiply = new JButton(new JButton("*"));
+	JButton jbtdivide = new JButton(new JButton("/"));
+	JButton jbtsin =  new JButton(new JButton("sin"));
+	JButton jbtcos = new JButton(new JButton("cos"));
+	JButton jbtsquare = new JButton(new JButton("^"));
+	JButton jbtlog = new JButton(new JButton("log"));
+
+
+	for()int i = 1 ; i <= 9; i++){
+		p1.add(new JButton("" + i));
+	}
+	p1.add(jbtzero);
+	p1.add(jbtclear);
+	p1.add(jbtadd);
+	p1.add(jbtsubtract);
+	p1.add(jbtmutiply);
+	p1.add(jbtdivide);
+	p1.add(jbtcos);
+	p1.add(jbtsquare);
+        p1.add(jbtlog);
+	
+}
