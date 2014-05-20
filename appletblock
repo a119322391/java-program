@@ -1,0 +1,223 @@
+import java.awt.*;
+import java.applet.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.UIManager;
+import javax.swing.plaf.metal.MetalLookAndFeel;
+
+public class HelloWorld extends javax.swing.JApplet {
+
+  static {
+    try {
+      UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+    }
+    catch(Exception e) {}
+  }
+
+  public static void main(String args[]){
+    HelloWorldJFrame frame = new HelloWorldJFrame();
+  }
+  
+  // 建構函式
+  public HelloWorld() {
+    System.out.println("JApplet建構函式");
+  }
+
+  public void init() {
+    System.out.println("JApplet init()");
+
+    DisplayPanel displayPanel = new DisplayPanel("Hello World JApplet");
+
+    // JDK 1.4的用法
+    // 取得其Content Pane 
+    //Container contentPane = getContentPane();
+    // 定義 Layout Manager 為 BorderLayout
+    //contentPane.setLayout(new BorderLayout());
+    // 將物件加至Content Pane中
+    //contentPane.add(displayPanel, BorderLayout.CENTER);
+
+    // JDK 5.0之後的用法
+    // 直接定義JFrame之Layout BorderLayout
+    this.setLayout(new BorderLayout());
+    this.add(displayPanel, BorderLayout.CENTER);
+  }
+
+  public void start() {
+    System.out.println("JApplet start()");
+  }
+  
+  public void stop() {
+    System.out.println("JApplet stop()");
+  }
+  
+  public void destroy() {
+    System.out.println("JApplet destroy()");
+  }
+}
+
+class HelloWorldJFrame extends javax.swing.JFrame {
+  // 建構函式
+  public HelloWorldJFrame() {
+    super("Hello World JFrame");
+
+    DisplayPanel displayPanel = new DisplayPanel("Hello World JFrame");
+
+    this.setLayout(new BorderLayout());
+    this.add(displayPanel, BorderLayout.CENTER);
+
+    this.validate();
+    this.setSize(new Dimension(200, 200));
+
+    // Center the frame
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    Dimension frameSize = this.getSize();
+    if (frameSize.height > screenSize.height)
+      frameSize.height = screenSize.height;
+    if (frameSize.width > screenSize.width)
+      frameSize.width = screenSize.width;
+    this.setLocation((screenSize.width - frameSize.width) / 2, (screenSize.height - frameSize.height) / 2);
+
+    this.setVisible(true);
+
+    this.addWindowListener(new WindowAdapter() {
+      public void windowClosing(WindowEvent e) {
+        System.exit(0);
+      }
+    });
+  }
+}
+
+
+class DisplayPanel extends javax.swing.JPanel {
+  String text;
+  
+  // 建構函式
+  public DisplayPanel(String text) {
+    this.text = text;
+  }
+
+  public void paintComponent(Graphics g){
+    super.paintComponent(g);
+    g.drawString(text, 50, 50);
+  }
+}
+
+
+
+
+
+
+
+
+
+public class StillClock extends JPanel {
+  private int hour;
+  private int minute;
+  private int second;
+
+  /** Construct a default clock with the current time*/
+  public StillClock() {
+    setCurrentTime();
+  }
+
+  /** Construct a clock with specified hour, minute, and second */
+  public StillClock(int hour, int minute, int second) {
+    this.hour = hour;
+    this.minute = minute;
+    this.second = second;
+  }
+
+  /** Return hour */
+  public int getHour() {
+    return hour;
+  }
+
+  /** Set a new hour */
+  public void setHour(int hour) {
+    this.hour = hour;
+    repaint();
+  }
+
+  /** Return minute */
+  public int getMinute() {
+    return minute;
+  }
+
+  /** Set a new minute */
+  public void setMinute(int minute) {
+    this.minute = minute;
+    repaint();
+  }
+
+  /** Return second */
+  public int getSecond() {
+    return second;
+  }
+
+  /** Set a new second */
+  public void setSecond(int second) {
+    this.second = second;
+    repaint();
+  }
+
+  @Override /** Draw the clock */
+  protected void paintComponent(Graphics g) {
+    super.paintComponent(g);
+
+    // Initialize clock parameters
+    int clockRadius =
+      (int)(Math.min(getWidth(), getHeight()) * 0.8 * 0.5);
+    int xCenter = getWidth() / 2;
+    int yCenter = getHeight() / 2;
+
+    // Draw circle
+    g.setColor(Color.black);
+    g.drawOval(xCenter - clockRadius, yCenter - clockRadius,
+      2 * clockRadius, 2 * clockRadius);
+    g.drawString("12", xCenter - 5, yCenter - clockRadius + 12);
+    g.drawString("9", xCenter - clockRadius + 3, yCenter + 5);
+    g.drawString("3", xCenter + clockRadius - 10, yCenter + 3);
+    g.drawString("6", xCenter - 3, yCenter + clockRadius - 3);
+
+    // Draw second hand
+    int sLength = (int)(clockRadius * 0.8);
+    int xSecond = (int)(xCenter + sLength * Math.sin(second * (2 * Math.PI / 60)));
+    int ySecond = (int)(yCenter - sLength *
+      Math.cos(second * (2 * Math.PI / 60)));
+    g.setColor(Color.red);
+    g.drawLine(xCenter, yCenter, xSecond, ySecond);
+
+    // Draw minute hand
+    int mLength = (int)(clockRadius * 0.65);
+    int xMinute = (int)(xCenter + mLength *
+      Math.sin(minute * (2 * Math.PI / 60)));
+    int yMinute = (int)(yCenter - mLength *
+      Math.cos(minute * (2 * Math.PI / 60)));
+    g.setColor(Color.blue);
+    g.drawLine(xCenter, yCenter, xMinute, yMinute);
+
+    // Draw hour hand
+    int hLength = (int)(clockRadius * 0.5);
+    int xHour = (int)(xCenter + hLength *
+      Math.sin((hour % 12 + minute / 60.0) * (2 * Math.PI / 12)));
+    int yHour = (int)(yCenter - hLength *
+      Math.cos((hour % 12 + minute / 60.0) * (2 * Math.PI / 12)));
+    g.setColor(Color.green);
+    g.drawLine(xCenter, yCenter, xHour, yHour);
+  }
+
+  public void setCurrentTime() {
+    // Construct a calendar for the current date and time
+    Calendar calendar = new GregorianCalendar();
+
+    // Set current hour, minute and second
+    this.hour = calendar.get(Calendar.HOUR_OF_DAY);
+    this.minute = calendar.get(Calendar.MINUTE);
+    this.second = calendar.get(Calendar.SECOND);
+  }
+
+  @Override
+  public Dimension getPreferredSize() {
+    return new Dimension(200, 200);
+  }
+}
